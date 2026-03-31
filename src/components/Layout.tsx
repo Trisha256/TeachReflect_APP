@@ -11,8 +11,11 @@ import {
   X,
   GraduationCap,
   Bell,
+  LogOut,
+  ChevronDown,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { isThisWeek } from '../utils/helpers';
 
 const navItems = [
@@ -26,8 +29,10 @@ const navItems = [
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
   const { state } = useApp();
+  const { currentUser, logout } = useAuth();
 
   // Count lessons without reflection this week
   const pendingReflections = state.lessons.filter(
@@ -107,10 +112,45 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </div>
         )}
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-100">
-          <p className="text-xs text-gray-400">TeachReflect v1.0</p>
-          <p className="text-xs text-gray-400">EAL & SEN Supported</p>
+        {/* Footer — user info + logout */}
+        <div className="px-3 py-3 border-t border-gray-100">
+          {currentUser && (
+            <div className="relative">
+              <button
+                onClick={() => setUserMenuOpen((v) => !v)}
+                className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm hover:bg-gray-100 transition-colors"
+              >
+                <div className="w-7 h-7 rounded-full bg-primary-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                  {currentUser.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0 text-left">
+                  <p className="text-xs font-semibold text-gray-900 truncate">
+                    {currentUser.name}
+                  </p>
+                  <p className="text-xs text-gray-400 truncate">{currentUser.email}</p>
+                </div>
+                <ChevronDown size={14} className="text-gray-400 flex-shrink-0" />
+              </button>
+              {userMenuOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setUserMenuOpen(false)}
+                  />
+                  <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-lg shadow-lg z-20 py-1">
+                    <button
+                      onClick={() => { logout(); setUserMenuOpen(false); }}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut size={14} />
+                      Sign out
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+          <p className="text-xs text-gray-400 px-3 pt-2">TeachReflect v2.0</p>
         </div>
       </aside>
 

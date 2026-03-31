@@ -6,6 +6,7 @@ import {
   BookOpen,
   TrendingUp,
   Printer,
+  FileText,
 } from 'lucide-react';
 import {
   LineChart,
@@ -22,10 +23,13 @@ import {
   Pie,
 } from 'recharts';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { analyseLessons, formatDate, getScoreColor } from '../utils/helpers';
+import { exportReportPDF } from '../utils/exportPDF';
 
 const Reports: React.FC = () => {
   const { state } = useApp();
+  const { currentUser } = useAuth();
   const [activeReport, setActiveReport] = useState<
     'overview' | 'lessons' | 'students' | 'eal_sen'
   >('overview');
@@ -92,7 +96,32 @@ const Reports: React.FC = () => {
     (l) => l.differentiation.sen.accommodations_used.length > 0
   ).length;
 
+  // Monthly lesson count
+  const monthlyMap: Record<string, number> = {};
+  state.lessons.forEach((l) => {
+    const key = l.date.slice(0, 7); // YYYY-MM
+    monthlyMap[key] = (monthlyMap[key] ?? 0) + 1;
+  });
+  const monthlyData = Object.entries(monthlyMap)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .slice(-12)
+    .map(([month, count]) => ({ month, count }));
+
+  // Objectives met breakdown
+  const objMet = completedLessons.filter((l) => l.reflection.objectives_met === true).length;
+  const objPartial = completedLessons.filter((l) => l.reflection.objectives_met === null).length;
+  const objNotMet = completedLessons.filter((l) => l.reflection.objectives_met === false).length;
+  const objData = [
+    { name: 'Met', value: objMet, color: '#22c55e' },
+    { name: 'Partial', value: objPartial, color: '#f59e0b' },
+    { name: 'Not Met', value: objNotMet, color: '#ef4444' },
+  ].filter((d) => d.value > 0);
+
   const handlePrint = () => window.print();
+
+  const handleExportPDF = () => {
+    exportReportPDF(state.lessons, state.students, currentUser?.name);
+  };
 
   const handleExportCSV = () => {
     if (lessonData.length === 0) return;
@@ -149,9 +178,13 @@ const Reports: React.FC = () => {
             <Printer size={15} />
             Print
           </button>
-          <button onClick={handleExportCSV} className="btn-primary">
+          <button onClick={handleExportCSV} className="btn-secondary">
             <Download size={15} />
-            Export CSV
+            CSV
+          </button>
+          <button onClick={handleExportPDF} className="btn-primary">
+            <FileText size={15} />
+            Export PDF
           </button>
         </div>
       </div>
@@ -246,6 +279,56 @@ const Reports: React.FC = () => {
                 Complete lessons to see effectiveness trend
               </div>
             )}
+          </div>
+
+          {/* Monthly Lessons + Objectives-Met */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="card">
+              <h2 className="section-title">Lessons Per Month</h2>
+              {monthlyData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={monthlyData} barSize={22}>
+                    <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+                    <YAxis allowDecimals={false} tick={{ fontSize: 11 }} width={25} />
+                    <Tooltip formatter={(v) => [v, 'Lessons']} />
+                    <Bar dataKey="count" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-40 flex items-center justify-center text-gray-400 text-sm">
+                  Add lessons to see monthly activity
+                </div>
+              )}
+            </div>
+
+            <div className="card">
+              <h2 className="section-title">Objectives Met (Completed Lessons)</h2>
+              {objData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={objData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={75}
+                      dataKey="value"
+                      label={({ name, value }) => `${name}: ${value}`}
+                      labelLine={false}
+                    >
+                      {objData.map((entry, i) => (
+                        <Cell key={i} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-40 flex items-center justify-center text-gray-400 text-sm">
+                  Complete and reflect on lessons to see data
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Subject & Engagement */}
