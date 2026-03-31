@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Save,
@@ -252,10 +252,6 @@ const LessonPlanner: React.FC = () => {
 
   const [showTemplates, setShowTemplates] = useState(false);
   const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (existing) setLesson({ ...existing });
-  }, [existing]);
 
   const applyTemplate = (templateId: string) => {
     const tpl = state.templates.find((t) => t.id === templateId);

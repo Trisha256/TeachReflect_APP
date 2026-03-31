@@ -49,7 +49,7 @@ const NewLessonWrapper: React.FC = () => {
       },
     });
     navigate(`/lessons/${lesson.id}/plan`, { replace: true });
-  }, [templateId]);
+  }, [templateId, state.templates, addLesson, navigate]);
 
   if (templateId) return null;
   return <LessonPlanner />;

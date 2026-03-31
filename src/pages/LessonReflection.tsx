@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Save, CheckCircle, XCircle, Minus, BookOpen, Lightbulb, ArrowRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
@@ -107,10 +107,6 @@ const LessonReflection: React.FC = () => {
   );
   const [saved, setSaved] = useState(false);
   const [showAnalysis, setShowAnalysis] = useState(false);
-
-  useEffect(() => {
-    if (lesson) setReflection(lesson.reflection);
-  }, [lesson]);
 
   if (!lesson) {
     return (

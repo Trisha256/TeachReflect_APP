@@ -421,7 +421,7 @@ const Reports: React.FC = () => {
                         {s.year_group} {s.class_name && `· ${s.class_name}`}
                       </td>
                       <td className="py-2.5 pr-4">
-                        {Boolean(s.eal_level) ? (
+                        {s.eal_level ? (
                           <span className="badge badge-blue">{s.eal_level}</span>
                         ) : (
                           <span className="text-gray-400">—</span>
