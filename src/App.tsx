@@ -3,15 +3,15 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import { generateId, createDefaultLesson } from './utils/helpers';
 import Loader from './components/Loader';
-
-<Suspense fallback={<Loader />}></Suspense>
 
 // 🔥 Lazy-loaded pages
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -24,6 +24,8 @@ const StudentProfiles = lazy(() => import('./pages/StudentProfiles'));
 const Reports = lazy(() => import('./pages/Reports'));
 const Templates = lazy(() => import('./pages/Templates'));
 const QuickReflect = lazy(() => import('./pages/QuickReflect'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
 
 // Wrapper for new lesson with optional template
 const NewLessonWrapper: React.FC = () => {
@@ -72,9 +74,26 @@ const NewLessonWrapper: React.FC = () => {
   return <LessonPlanner />;
 };
 
-const App: React.FC = () => (
-  <BrowserRouter>
-    <AppProvider>
+// Protected routes — redirects to /login when unauthenticated
+const AppRoutes: React.FC = () => {
+  const { currentUser, isLoading } = useAuth();
+
+  if (isLoading) return <Loader />;
+
+  if (!currentUser) {
+    return (
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </Suspense>
+    );
+  }
+
+  return (
+    <AppProvider userId={currentUser.id}>
       <Layout>
         {/* 🔥 Suspense wraps all lazy-loaded routes */}
         <Suspense fallback={<div>Loading page...</div>}>
@@ -90,10 +109,20 @@ const App: React.FC = () => (
             <Route path="/reports" element={<Reports />} />
             <Route path="/templates" element={<Templates />} />
             <Route path="/quick-reflect" element={<QuickReflect />} />
+            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="/register" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
       </Layout>
     </AppProvider>
+  );
+};
+
+const App: React.FC = () => (
+  <BrowserRouter>
+    <AuthProvider>
+      <AppRoutes />
+    </AuthProvider>
   </BrowserRouter>
 );
 

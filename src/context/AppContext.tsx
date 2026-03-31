@@ -73,11 +73,14 @@ const initialState: AppState = {
   templates: BUILTIN_TEMPLATES,
 };
 
-const STORAGE_KEY = 'teachreflect_data';
+const BASE_STORAGE_KEY = 'teachreflect_data';
 
-const loadFromStorage = (): AppState => {
+const storageKey = (userId: string | null) =>
+  userId ? `${BASE_STORAGE_KEY}_${userId}` : BASE_STORAGE_KEY;
+
+const loadFromStorage = (userId: string | null): AppState => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(storageKey(userId));
     if (!raw) return initialState;
     const parsed = JSON.parse(raw) as Partial<AppState>;
     // Merge built-in templates with stored custom templates
@@ -108,10 +111,16 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | null>(null);
 
 // ─── Provider ──────────────────────────────────────────────────────────────────
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
+export const AppProvider: React.FC<{ children: React.ReactNode; userId: string | null }> = ({
   children,
+  userId,
 }) => {
-  const [state, dispatch] = useReducer(reducer, initialState, loadFromStorage);
+  const [state, dispatch] = useReducer(reducer, userId, loadFromStorage);
+
+  // When the logged-in user changes, reload their data
+  useEffect(() => {
+    dispatch({ type: 'LOAD_STATE', state: loadFromStorage(userId) });
+  }, [userId]);
 
   // Persist to localStorage whenever state changes
   useEffect(() => {
@@ -119,7 +128,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       // Only save custom templates
       const customTemplates = state.templates.filter((t) => !t.is_builtin);
       localStorage.setItem(
-        STORAGE_KEY,
+        storageKey(userId),
         JSON.stringify({
           lessons: state.lessons,
           students: state.students,
@@ -129,7 +138,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch {
       // Ignore storage errors
     }
-  }, [state]);
+  }, [state, userId]);
 
   const addLesson = useCallback(
     (data: Omit<Lesson, 'id' | 'created_at' | 'updated_at'>): Lesson => {
