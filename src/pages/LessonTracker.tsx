@@ -253,11 +253,11 @@ const LessonTracker: React.FC = () => {
   const { state, updateLesson } = useApp();
 
   const lesson = state.lessons.find((l) => l.id === id);
-  const [localLesson] = useState<Lesson | null>(
+  const [localLesson, setLocalLesson] = useState<Lesson | null>(
     () => (lesson ? { ...lesson, status: 'in_progress' as const } : null)
   );
   const [activeActivity, setActiveActivity] = useState<string | null>(null);
-  const [generalNotes] = useState(
+  const [generalNotes, setGeneralNotes] = useState(
     () => lesson?.tracking.general_notes ?? ''
   );
   const [saved, setSaved] = useState(false);
