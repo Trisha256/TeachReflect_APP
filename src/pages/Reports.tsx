@@ -164,16 +164,16 @@ const Reports: React.FC = () => {
   ] as const;
 
   return (
-    <div className="p-6 max-w-6xl mx-auto print:p-4">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto print:p-4">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6 print:mb-4">
+      <div className="flex flex-wrap items-start justify-between gap-y-3 mb-6 print:mb-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Reports & Analytics</h1>
           <p className="text-sm text-gray-500 mt-1">
             Insights across {state.lessons.length} lessons and {state.students.length} students
           </p>
         </div>
-        <div className="flex gap-2 print:hidden">
+        <div className="flex flex-wrap gap-2 print:hidden">
           <button onClick={handlePrint} className="btn-secondary">
             <Printer size={15} />
             Print

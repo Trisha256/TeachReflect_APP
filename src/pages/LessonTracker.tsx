@@ -321,9 +321,9 @@ const LessonTracker: React.FC = () => {
   );
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-wrap items-start justify-between gap-y-3 mb-6">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="badge badge-yellow">In Progress</span>
@@ -335,7 +335,7 @@ const LessonTracker: React.FC = () => {
             {lesson.subject} · {lesson.year_group} · {lesson.duration} min
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button onClick={handleSave} className="btn-secondary">
             <Save size={15} />
             {saved ? 'Saved!' : 'Save'}
@@ -366,7 +366,7 @@ const LessonTracker: React.FC = () => {
             }}
           />
         </div>
-        <div className="flex gap-6 text-sm">
+        <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
           <div className="flex items-center gap-1.5 text-gray-600">
             <Clock size={14} />
             <span>Planned: {totalPlanned} min</span>
@@ -481,7 +481,7 @@ const LessonTracker: React.FC = () => {
       </div>
 
       {/* Bottom Actions */}
-      <div className="flex gap-3 justify-end">
+      <div className="flex flex-wrap gap-3 justify-end">
         <button onClick={handleSave} className="btn-secondary">
           <Save size={15} />
           {saved ? 'Saved!' : 'Save Progress'}

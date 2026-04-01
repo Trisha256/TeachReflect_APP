@@ -48,7 +48,7 @@ const ObjectivesMet: React.FC<{
   value: boolean | null;
   onChange: (v: boolean | null) => void;
 }> = ({ value, onChange }) => (
-  <div className="flex gap-3">
+  <div className="flex flex-wrap gap-2">
     <button
       type="button"
       onClick={() => onChange(true)}
@@ -143,16 +143,16 @@ const LessonReflection: React.FC = () => {
   const analysis = analyseLessons(previewLesson);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-wrap items-start justify-between gap-y-3 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Post-Lesson Reflection</h1>
           <p className="text-sm text-gray-500 mt-1">
             {lesson.title || 'Untitled Lesson'} · {lesson.subject} · {lesson.year_group}
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button onClick={() => handleSave(false)} className="btn-secondary">
             <Save size={15} />
             {saved ? 'Saved!' : 'Save Draft'}
@@ -404,7 +404,7 @@ const LessonReflection: React.FC = () => {
       </div>
 
       {/* Bottom Actions */}
-      <div className="flex gap-3 justify-end mt-6">
+      <div className="flex flex-wrap gap-3 justify-end mt-6">
         <button onClick={() => handleSave(false)} className="btn-secondary">
           <Save size={15} />
           Save Draft

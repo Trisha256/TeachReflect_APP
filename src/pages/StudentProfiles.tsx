@@ -535,9 +535,9 @@ const StudentProfiles: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-wrap items-start justify-between gap-y-3 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Student Profiles</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -555,7 +555,7 @@ const StudentProfiles: React.FC = () => {
       {/* Filters */}
       <div className="card mb-6">
         <div className="flex flex-wrap gap-3">
-          <div className="relative flex-1 min-w-48">
+          <div className="relative flex-1 min-w-0">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
@@ -568,7 +568,7 @@ const StudentProfiles: React.FC = () => {
           <select
             value={filterYear}
             onChange={(e) => setFilterYear(e.target.value)}
-            className="input w-auto"
+            className="input w-full sm:w-auto"
           >
             <option value="">All Year Groups</option>
             {YEAR_GROUPS.map((y) => (
@@ -578,7 +578,7 @@ const StudentProfiles: React.FC = () => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="input w-auto"
+            className="input w-full sm:w-auto"
           >
             <option value="">All Students</option>
             <option value="eal">EAL Only</option>
