@@ -79,16 +79,16 @@ const Dashboard: React.FC = () => {
   );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-wrap items-start justify-between gap-y-3 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-500 text-sm mt-1">
             Welcome back! Here's an overview of your teaching practice.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Link to="/quick-reflect" className="btn-secondary">
             <Zap size={16} />
             Quick Reflect
@@ -298,9 +298,9 @@ const Dashboard: React.FC = () => {
               const analysis =
                 lesson.status === 'completed' ? analyseLessons(lesson) : null;
               return (
-                <div
+              <div
                   key={lesson.id}
-                  className="flex items-center gap-4 py-3 hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors"
+                  className="flex flex-wrap items-center gap-x-4 gap-y-2 py-3 hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors"
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm text-gray-900 truncate">
@@ -310,7 +310,7 @@ const Dashboard: React.FC = () => {
                       {lesson.subject} · {lesson.year_group} · {formatDate(lesson.date)}
                     </p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-shrink-0">
                     {analysis && (
                       <span
                         className={`text-sm font-semibold ${getScoreColor(

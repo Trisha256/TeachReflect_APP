@@ -67,7 +67,7 @@ const QuickReflect: React.FC = () => {
     setForm((p) => ({ ...p, [key]: val }));
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center">

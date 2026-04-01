@@ -44,16 +44,16 @@ const LessonsList: React.FC = () => {
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex flex-wrap items-start justify-between gap-y-3 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Lessons</h1>
           <p className="text-sm text-gray-500 mt-1">
             {state.lessons.length} lesson{state.lessons.length !== 1 ? 's' : ''} total
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Link to="/quick-reflect" className="btn-secondary">
             <Zap size={16} />
             Quick Reflect
@@ -68,7 +68,7 @@ const LessonsList: React.FC = () => {
       {/* Filters */}
       <div className="card mb-6">
         <div className="flex flex-wrap gap-3">
-          <div className="relative flex-1 min-w-48">
+          <div className="relative flex-1 min-w-0">
             <Search
               size={16}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -84,7 +84,7 @@ const LessonsList: React.FC = () => {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="input w-auto"
+            className="input w-full sm:w-auto"
           >
             <option value="">All Statuses</option>
             <option value="planned">Planned</option>
@@ -94,7 +94,7 @@ const LessonsList: React.FC = () => {
           <select
             value={filterSubject}
             onChange={(e) => setFilterSubject(e.target.value)}
-            className="input w-auto"
+            className="input w-full sm:w-auto"
           >
             <option value="">All Subjects</option>
             {SUBJECTS.map((s) => (
@@ -106,7 +106,7 @@ const LessonsList: React.FC = () => {
           <select
             value={filterYear}
             onChange={(e) => setFilterYear(e.target.value)}
-            className="input w-auto"
+            className="input w-full sm:w-auto"
           >
             <option value="">All Year Groups</option>
             {YEAR_GROUPS.map((y) => (
@@ -234,7 +234,7 @@ const LessonsList: React.FC = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                    <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-gray-100">
                       <Link
                         to={`/lessons/${lesson.id}`}
                         className="btn-secondary text-xs py-1.5"

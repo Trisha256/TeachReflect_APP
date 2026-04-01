@@ -47,7 +47,7 @@ const LessonDetail: React.FC = () => {
   const completedActivities = lesson.activities.filter((a) => a.completed).length;
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       {/* Back */}
       <Link
         to="/lessons"
@@ -58,7 +58,7 @@ const LessonDetail: React.FC = () => {
       </Link>
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-6 gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <span
