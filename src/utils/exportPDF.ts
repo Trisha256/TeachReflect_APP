@@ -1,5 +1,6 @@
-import jsPDF from 'jspdf';
+  
 import autoTable from 'jspdf-autotable';
+import { jsPDF } from 'jspdf';
 import type { Lesson, Student } from '../types';
 import { analyseLessons, formatDate } from './helpers';
 
